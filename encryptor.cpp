@@ -4,10 +4,6 @@
 
 using namespace std;
 
-int randIntGen() {
-    return (rand() % 98) + 1;
-}
-
 int main() {
     srand(time(0));
 
@@ -30,12 +26,23 @@ int main() {
 
     // ENCRYPTION HAPPENS
     for(int x = 0; x < name.length(); x++) {
-        int randInt = randIntGen();
+        int randInt = (rand() % 98) + 1;
         while(((int)name[x] + randInt) > 126) {
-            randInt = randIntGen();
+            randInt = (rand() % 98) + 1;
         }
         genKey[x] = randInt; // random numbers
-        encrypted = encrypted + (char)((int) name[x] + genKey[x]);
+        if(((int)name[x] + randInt) > 78) {
+            encrypted = encrypted + (char)((int) name[x] + genKey[x]);
+            genKey[(x*2)] = 0;
+        }
+        else if(((int)name[x] + randInt < 78)) {
+            encrypted = encrypted + (char)((int) name[x] - genKey[x]);
+            genKey[(x*2)] = 1;
+        }
+    }
+
+    for(int x = sizeof(genKey); x < (sizeof(genKey) * 2); x++) {
+        // genKey[x] = 1;
     }
 
     // PRINTING CODES
