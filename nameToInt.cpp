@@ -4,12 +4,16 @@
 
 using namespace std;
 
+int randIntGen() {
+    return (rand() % 98) + 1;
+}
+
 int main() {
     srand(time(0));
 
     string name;
     string encrypted;
-    static int *key = new int[name.length()];
+    static int *genKey = new int[name.length()];
     string keyChar;
     string decrypted;
 
@@ -26,8 +30,12 @@ int main() {
 
     // ENCRYPTION HAPPENS
     for(int x = 0; x < name.length(); x++) {
-        key[x] = rand() % 99; // random numbers
-        encrypted = encrypted + (char)((int) name[x] + key[x]);
+        int randInt = randIntGen();
+        while(((int)name[x] + randInt) > 126) {
+            randInt = randIntGen();
+        }
+        genKey[x] = randInt; // random numbers
+        encrypted = encrypted + (char)((int) name[x] + genKey[x]);
     }
 
     // PRINTING CODES
@@ -42,8 +50,8 @@ int main() {
     cout << "\t\t\t\t\t***** GENERATED KEY *****\n\n";
     cout << "Decimal : ";
     for(int x = 0; x < name.length(); x++) {
-        cout << key[x] << "\t";
-        keyChar = keyChar + (char)key[x];
+        cout << genKey[x] << "\t";
+        keyChar = keyChar + (char)genKey[x];
     }
     cout << "\nCharacter : " << keyChar << "\n\n\n"; // print generated key character name
 
@@ -51,7 +59,7 @@ int main() {
     cout << "\t\t\t\t\t***** DECRYPTED INPUT *****\n\n";
     cout << "Decimal : ";
     for(int x = 0; x < name.length(); x++) {
-        decrypted = decrypted + (char)((int) encrypted[x] - key[x]);
+        decrypted = decrypted + (char)((int) encrypted[x] - genKey[x]);
         cout << (int)decrypted[x] << "\t";
     }
     cout << "\nCharacter : " << decrypted; // print decrypted name
